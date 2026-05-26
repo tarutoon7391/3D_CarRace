@@ -87,8 +87,8 @@ const acceleration = 0.006;
 const braking = 0.025;
 const friction = 0.004;
 const maxSteering = Math.PI / 6; // 30 degrees
-const steeringSpeed = 0.04;
-const steeringReturn = 0.03;
+const steeringSpeed = 0.01;
+const steeringReturn = 0.008;
 
 let currentSpeed = 0;
 let steeringAngle = 0;
@@ -130,13 +130,11 @@ function animate() {
 
   carGroup.rotation.y = carAngle;
 
-  // Camera follow
-  const camOffset = new THREE.Vector3(
-    -Math.sin(carAngle) * -10,
-    5,
-    -Math.cos(carAngle) * -10
-  );
-  camera.position.lerp(carGroup.position.clone().add(camOffset), 0.1);
+  // Camera follow (directly behind car, smooth lerp)
+  const offset = new THREE.Vector3(0, 5, 10);
+  offset.applyQuaternion(carGroup.quaternion);
+  const targetPosition = carGroup.position.clone().add(offset);
+  camera.position.lerp(targetPosition, 0.05);
   camera.lookAt(carGroup.position);
 
   renderer.render(scene, camera);
