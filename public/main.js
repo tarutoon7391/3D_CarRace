@@ -87,8 +87,8 @@ const acceleration = 0.006;
 const braking = 0.025;
 const friction = 0.004;
 const maxSteering = Math.PI / 6; // 30 degrees
-const steeringSpeed = 0.01;
-const steeringReturn = 0.008;
+const steeringSpeed = 0.001;
+const steeringReturn = 0.0008;
 
 let currentSpeed = 0;
 let steeringAngle = 0;
