@@ -122,7 +122,7 @@ function animate() {
   }
 
   // Turn only when moving (proportional to speed)
-  carAngle += steeringAngle * (currentSpeed / maxSpeed);
+  carAngle += steeringAngle * 0.05 * (currentSpeed / maxSpeed);
 
   // Move in the direction the car is facing
   carGroup.position.x -= Math.sin(carAngle) * currentSpeed;
@@ -131,10 +131,14 @@ function animate() {
   carGroup.rotation.y = carAngle;
 
   // Camera follow (directly behind car, smooth lerp)
-  const offset = new THREE.Vector3(0, 5, 10);
-  offset.applyQuaternion(carGroup.quaternion);
-  const targetPosition = carGroup.position.clone().add(offset);
-  camera.position.lerp(targetPosition, 0.05);
+  const camDistance = 10;
+  const camHeight = 5;
+  const targetPosition = new THREE.Vector3(
+    carGroup.position.x + Math.sin(carAngle) * camDistance,
+    carGroup.position.y + camHeight,
+    carGroup.position.z + Math.cos(carAngle) * camDistance
+  );
+  camera.position.lerp(targetPosition, 0.08);
   camera.lookAt(carGroup.position);
 
   renderer.render(scene, camera);
