@@ -1,0 +1,13 @@
+{
+  "name": "3d-car-race",
+  "version": "1.0.0",
+  "description": "3D Car Racing Game with Three.js and Socket.io",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}
