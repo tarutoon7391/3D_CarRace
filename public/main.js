@@ -82,29 +82,51 @@ document.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; 
 document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 
 // Car state
-const carSpeed = 0.15;
-const carTurnSpeed = 0.03;
+const maxSpeed = 0.3;
+const acceleration = 0.006;
+const braking = 0.025;
+const friction = 0.004;
+const maxSteering = Math.PI / 6; // 30 degrees
+const steeringSpeed = 0.04;
+const steeringReturn = 0.03;
+
+let currentSpeed = 0;
+let steeringAngle = 0;
 let carAngle = 0;
 
 // Animation loop
 function animate() {
   requestAnimationFrame(animate);
 
-  // WASD movement
+  // Acceleration / braking
   if (keys['w'] || keys['arrowup']) {
-    carGroup.position.x -= Math.sin(carAngle) * carSpeed;
-    carGroup.position.z -= Math.cos(carAngle) * carSpeed;
+    currentSpeed = Math.min(currentSpeed + acceleration, maxSpeed);
+  } else if (keys['s'] || keys['arrowdown']) {
+    currentSpeed = Math.max(currentSpeed - braking, 0);
+  } else {
+    currentSpeed = Math.max(currentSpeed - friction, 0);
   }
-  if (keys['s'] || keys['arrowdown']) {
-    carGroup.position.x += Math.sin(carAngle) * carSpeed;
-    carGroup.position.z += Math.cos(carAngle) * carSpeed;
-  }
+
+  // Steering
   if (keys['a'] || keys['arrowleft']) {
-    carAngle += carTurnSpeed;
+    steeringAngle = Math.min(steeringAngle + steeringSpeed, maxSteering);
+  } else if (keys['d'] || keys['arrowright']) {
+    steeringAngle = Math.max(steeringAngle - steeringSpeed, -maxSteering);
+  } else {
+    // Return to center
+    if (steeringAngle > 0) {
+      steeringAngle = Math.max(steeringAngle - steeringReturn, 0);
+    } else {
+      steeringAngle = Math.min(steeringAngle + steeringReturn, 0);
+    }
   }
-  if (keys['d'] || keys['arrowright']) {
-    carAngle -= carTurnSpeed;
-  }
+
+  // Turn only when moving (proportional to speed)
+  carAngle += steeringAngle * (currentSpeed / maxSpeed);
+
+  // Move in the direction the car is facing
+  carGroup.position.x -= Math.sin(carAngle) * currentSpeed;
+  carGroup.position.z -= Math.cos(carAngle) * currentSpeed;
 
   carGroup.rotation.y = carAngle;
 
