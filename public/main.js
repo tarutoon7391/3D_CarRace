@@ -86,8 +86,8 @@ const maxSpeed = 0.3;
 const acceleration = 0.006;
 const braking = 0.025;
 const friction = 0.004;
-const maxSteering = 0.08;
-const steeringSpeed = 0.0015;
+const maxSteering = 0.04;
+const steeringSpeed = 0.001;
 const steeringReturn = 0.012;
 
 let currentSpeed = 0;
