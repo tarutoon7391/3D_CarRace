@@ -19,10 +19,71 @@
       padding: 8px 12px;
       border-radius: 4px;
     }
+    #hud-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    #steering-hud {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 16px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 320px;
+    }
+    #steering-label {
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    #steering-bar-bg {
+      position: relative;
+      flex: 1;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    #steering-bar-bg::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+    #steering-bar {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      background: #4caf50;
+    }
+    #steering-value {
+      font-size: 13px;
+      min-width: 60px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 </head>
 <body>
   <div id="info">W/S: アクセル・ブレーキ &nbsp;|&nbsp; A/D: ハンドル</div>
+  <div id="hud-container">
+    <div id="steering-hud">
+      <span id="steering-label">ステアリング</span>
+      <div id="steering-bar-bg">
+        <div id="steering-bar"></div>
+      </div>
+      <span id="steering-value">+0.00°</span>
+    </div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="main.js"></script>

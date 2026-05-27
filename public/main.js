@@ -86,9 +86,9 @@ const maxSpeed = 0.3;
 const acceleration = 0.006;
 const braking = 0.025;
 const friction = 0.004;
-const maxSteering = Math.PI / 6; // 30 degrees
-const steeringSpeed = 0.001;
-const steeringReturn = 0.0008;
+const maxSteering = 0.08;
+const steeringSpeed = 0.0015;
+const steeringReturn = 0.012;
 
 let currentSpeed = 0;
 let steeringAngle = 0;
@@ -136,6 +136,23 @@ function animate() {
   const targetPosition = carGroup.position.clone().add(offset);
   camera.position.lerp(targetPosition, 0.05);
   camera.lookAt(carGroup.position);
+
+  // ステアリングHUD更新
+  const steeringBar = document.getElementById('steering-bar');
+  const steeringValue = document.getElementById('steering-value');
+  if (steeringBar && steeringValue) {
+    const ratio = (steeringAngle / maxSteering) * 50; // -50%〜+50%
+    if (ratio >= 0) {
+      steeringBar.style.left = '50%';
+      steeringBar.style.width = ratio + '%';
+    } else {
+      steeringBar.style.left = (50 + ratio) + '%';
+      steeringBar.style.width = (-ratio) + '%';
+    }
+    const degrees = steeringAngle * (180 / Math.PI);
+    const sign = degrees >= 0 ? '+' : '';
+    steeringValue.textContent = sign + degrees.toFixed(2) + '°';
+  }
 
   renderer.render(scene, camera);
 }
